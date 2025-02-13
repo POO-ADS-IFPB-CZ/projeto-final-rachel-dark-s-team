@@ -1,6 +1,8 @@
-package model;
+package src.model;
 
-public class Jogador {
+import java.io.Serializable;
+
+public class Jogador implements Serializable {
     private String nome;
     private int vitorias;
     private int derrotas;
