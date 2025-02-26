@@ -40,16 +40,24 @@ public class JogadorDao {
         return false;
     }
 
-    public boolean atualizarJogador(Jogador jogador) throws  IOException, ClassNotFoundException{
+    public boolean atualizarJogador(String nomeAntigo, String novoNome) throws  IOException, ClassNotFoundException{
         List<Jogador> jogadores = getJogadores();
-        // indice do jogador na lista. se não existe é -1.
-        int index = jogadores.indexOf(jogador);
-        if(index != -1){
-            jogadores.set(index,jogador);
-            atualizarArquivo(jogadores);
-            return true;
+        for(Jogador j : jogadores){
+            if(j.getNome().equals(nomeAntigo)){
+                j.setNome(novoNome);
+                atualizarArquivo(jogadores);
+                return true;
+            }
         }
         return false;
+        // indice do jogador na lista. se não existe é -1.
+        //int index = jogadores.indexOf(jogador);
+        //if(index != -1){
+        //    jogadores.set(index,jogador);
+        //    atualizarArquivo(jogadores);
+        //    return true;
+       // }
+        //return false;
     }
 
     private void atualizarArquivo(List<Jogador> jogadores)throws IOException {
