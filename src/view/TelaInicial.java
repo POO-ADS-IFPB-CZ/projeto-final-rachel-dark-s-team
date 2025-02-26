@@ -10,18 +10,20 @@ import java.io.IOException;
 
 public class TelaInicial extends JDialog {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+    private JButton buttonJogar;
+    private JButton buttonPlacar;
     private JTextField campoJogador1;
     private JTextField campoJogador2;
 
     public TelaInicial() {
         setTitle("Jogo da Velha");
+        setSize(400,400);
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(buttonJogar);
         JogadorDao jogadorDao = new JogadorDao();
-        buttonOK.addActionListener(new ActionListener() {
+
+        buttonJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome1 = campoJogador1.getText();
@@ -35,14 +37,26 @@ public class TelaInicial extends JDialog {
                 Jogador jogador2 = new Jogador(nome2,0,0,0);
 
                 try {
-                    jogadorDao.adicionarJogador(jogador1);
-                    jogadorDao.adicionarJogador(jogador2);
+                    if(!jogadorDao.getJogadores().contains(jogador1)){
+                        jogadorDao.adicionarJogador(jogador1);
+                    }
+                    if(!jogadorDao.getJogadores().contains(jogador2)){
+                        jogadorDao.adicionarJogador(jogador2);
+                    }
                 } catch (IOException | ClassNotFoundException ex) {
                         JOptionPane.showMessageDialog(null,"Erro ao salvar jogadores");
                         return;
                 }
                 JOptionPane.showMessageDialog(null,"Aparecer tela jogo");
 
+            }
+        });
+
+        buttonPlacar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TelaPlacar telaPlacar = new TelaPlacar();
+                telaPlacar.setVisible(true);
             }
         });
     }

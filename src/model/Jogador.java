@@ -3,6 +3,7 @@ package src.model;
 import java.io.Serializable;
 
 public class Jogador implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String nome;
     private int vitorias;
     private int derrotas;

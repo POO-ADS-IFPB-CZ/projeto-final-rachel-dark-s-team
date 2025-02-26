@@ -1,9 +1,9 @@
 package src.dao;
-import src.model.Jogador;
 
+import src.model.Jogador;
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JogadorDao {
     private File arquivo;
@@ -19,9 +19,11 @@ public class JogadorDao {
     }
 
     public boolean adicionarJogador(Jogador jogador) throws  IOException, ClassNotFoundException{
-        Set<Jogador> jogadores = getJogadores();
-        if(jogadores.add(jogador)){
+        List<Jogador> jogadores = getJogadores();
+        if(!jogadores.contains(jogador)){
+            jogadores.add(jogador);
             atualizarArquivo(jogadores);
+            System.out.println("Jogador salvo: " + jogador.getNome());
             return true;
         }
         return false;
@@ -30,7 +32,7 @@ public class JogadorDao {
 
     public boolean removerJogador(Jogador jogador) throws IOException,
             ClassNotFoundException {
-        Set<Jogador> jogadores = getJogadores();
+        List<Jogador> jogadores = getJogadores();
         if(jogadores.remove(jogador)){
             atualizarArquivo(jogadores);
             return true;
@@ -39,30 +41,51 @@ public class JogadorDao {
     }
 
     public boolean atualizarJogador(Jogador jogador) throws  IOException, ClassNotFoundException{
-        Set<Jogador> jogadores = getJogadores();
-        if(jogadores.contains(jogador)){
-            if(jogadores.remove(jogador) && jogadores.add(jogador)){
-                atualizarArquivo(jogadores);
-                return true;
-            }
+        List<Jogador> jogadores = getJogadores();
+        // indice do jogador na lista. se não existe é -1.
+        int index = jogadores.indexOf(jogador);
+        if(index != -1){
+            jogadores.set(index,jogador);
+            atualizarArquivo(jogadores);
+            return true;
         }
         return false;
     }
 
-    private void atualizarArquivo(Set<Jogador> jogadores)throws IOException {
+    private void atualizarArquivo(List<Jogador> jogadores)throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream((arquivo)))) {
             out.writeObject(jogadores);
         }
     }
 
-    public Set<Jogador> getJogadores() throws IOException, ClassNotFoundException{
-        if(arquivo.length()==0){
-            return new HashSet<>();
+    public List<Jogador> getJogadores() throws IOException, ClassNotFoundException {
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo não encontrado, retornando lista vazia.");
+            return new ArrayList<>();
         }
-        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(arquivo))){
-            return (Set<Jogador>) in.readObject();
+
+        if (arquivo.length() == 0) {
+            System.out.println("Arquivo está vazio.");
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(arquivo))) {
+            Object obj = in.readObject();
+            if (obj instanceof List<?>) {
+                List<Jogador> jogadores = (List<Jogador>) obj;
+                System.out.println("Jogadores carregados: " + jogadores.size());
+                return jogadores;
+            } else {
+                System.out.println("Erro: O arquivo não contém uma lista de jogadores.");
+                return new ArrayList<>();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            throw e;
         }
     }
+
+
 }
 
 
