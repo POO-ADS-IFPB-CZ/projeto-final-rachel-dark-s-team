@@ -30,14 +30,15 @@ public class JogadorDao {
     }
 
 
-    public boolean removerJogador(Jogador jogador) throws IOException,
+    public boolean removerJogador(String nome) throws IOException,
             ClassNotFoundException {
         List<Jogador> jogadores = getJogadores();
-        if(jogadores.remove(jogador)){
+        boolean removido = jogadores.removeIf((j -> j.getNome().equals(nome)));
+        if(removido){
             atualizarArquivo(jogadores);
             return true;
         }
-        return false;
+        return removido;
     }
 
     public boolean atualizarJogador(String nomeAntigo, String novoNome) throws  IOException, ClassNotFoundException{

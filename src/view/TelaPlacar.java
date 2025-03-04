@@ -13,7 +13,7 @@ import java.util.List;
 public class TelaPlacar extends JDialog {
     private JPanel contentPane;
     private JButton buttonEditar;
-    private JButton buttonCancel;
+    private JButton buttonDelete;
     private JScrollPane scroll;
     private DefaultListModel<String> listModel;
     private JogadorDao jogadorDao;
@@ -58,6 +58,34 @@ public class TelaPlacar extends JDialog {
                         JOptionPane.showMessageDialog(null,"Erro ao editar jogador");
                     }
                 }
+            }
+        });
+        buttonDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = listaJogadores.getSelectedIndex();
+                if(index != -1) {
+                    String nomeJogador = listModel.get(index).split(" - ")[0];
+
+                    int confirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover " + nomeJogador + "?", "Confirmar remoção", JOptionPane.YES_NO_OPTION);
+
+                    if (confirmacao == JOptionPane.YES_OPTION) {
+                        try {
+                            boolean removido = jogadorDao.removerJogador((nomeJogador));
+                            if (removido) {
+                                atualizarLista();
+                                JOptionPane.showMessageDialog(null, "Jogador removido!");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Erro ao remover jogador.");
+                            }
+                        } catch (IOException | ClassNotFoundException ex) {
+                            JOptionPane.showMessageDialog(null, "Erro ao acessar arquivo.");
+                        }
+                    }
+                } else{
+                    JOptionPane.showMessageDialog(null,"Selecione um jogador para remover.");
+                }
+
             }
         });
     }
