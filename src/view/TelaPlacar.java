@@ -102,10 +102,5 @@ public class TelaPlacar extends JDialog {
         }
     }
 
-    public static void main(String[] args) {
-        TelaPlacar dialog = new TelaPlacar();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
+
 }
