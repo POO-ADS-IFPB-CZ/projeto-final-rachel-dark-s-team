@@ -47,7 +47,8 @@ public class TelaInicial extends JDialog {
                         JOptionPane.showMessageDialog(null,"Erro ao salvar jogadores");
                         return;
                 }
-                JOptionPane.showMessageDialog(null,"Aparecer tela jogo");
+                TelaJogo telaJogo = new TelaJogo(3,nome1,nome2);
+                telaJogo.setVisible(true);
 
             }
         });
