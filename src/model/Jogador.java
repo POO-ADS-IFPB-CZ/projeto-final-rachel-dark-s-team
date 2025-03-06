@@ -35,4 +35,14 @@ public class Jogador implements Serializable {
     public int getEmpates() {
         return empates;
     }
+
+    public void adicionarVitoria(){
+        this.vitorias++;
+    }
+    public void adicionarEmpate(){
+        this.empates++;
+    }
+    public void adicionarDerrota(){
+        this.derrotas++;
+    }
 }

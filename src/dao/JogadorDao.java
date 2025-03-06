@@ -61,41 +61,37 @@ public class JogadorDao {
         //return false;
     }
 
-    private void atualizarArquivo(List<Jogador> jogadores)throws IOException {
+    public void atualizarArquivo(List<Jogador> jogadores)throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream((arquivo)))) {
-            out.writeObject(jogadores);
+            out.writeObject(new ArrayList<>(jogadores));
         }
     }
 
     public List<Jogador> getJogadores() throws IOException, ClassNotFoundException {
-        if (!arquivo.exists()) {
+        if (!arquivo.exists() || arquivo.length() == 0) {
             System.out.println("Arquivo não encontrado, retornando lista vazia.");
-            return new ArrayList<>();
-        }
-
-        if (arquivo.length() == 0) {
-            System.out.println("Arquivo está vazio.");
             return new ArrayList<>();
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(arquivo))) {
             Object obj = in.readObject();
             if (obj instanceof List<?>) {
-                List<Jogador> jogadores = (List<Jogador>) obj;
-                System.out.println("Jogadores carregados: " + jogadores.size());
-                return jogadores;
+                return (List<Jogador>) obj;
+                //List<Jogador> jogadores = (List<Jogador>) obj;
+                //System.out.println("Jogadores carregados: " + jogadores.size());
+                //return jogadores;
             } else {
                 System.out.println("Erro: O arquivo não contém uma lista de jogadores.");
                 return new ArrayList<>();
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
-            throw e;
+        } //catch (IOException | ClassNotFoundException e) {
+            //System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            //throw e;
         }
     }
 
 
-}
+
 
 
 
