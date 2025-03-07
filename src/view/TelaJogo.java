@@ -34,8 +34,9 @@ public class TelaJogo extends JDialog {
         for (int i = 0; i < tamanho; i++) {
             for (int j = 0; j < tamanho; j++) {
                 botoes[i][j] = new JButton(" ");
-                botoes[i][j].setFont(new Font("Arial", Font.BOLD, 24));
+                botoes[i][j].setFont(new Font("Arial", Font.BOLD, 28));
                 botoes[i][j].setFocusPainted(false);
+                botoes[i][j].setBackground(Color.WHITE);
                 botoes[i][j].setPreferredSize(new Dimension(80, 80));
                 painelTabuleiro.add(botoes[i][j]);
 
@@ -53,6 +54,7 @@ public class TelaJogo extends JDialog {
         if (!botoes[x][y].getText().equals(" ")) return;
 
         botoes[x][y].setText(jogadorAtual.equals(jogador1) ? "X" : "O");
+        botoes[x][y].setForeground(jogadorAtual.equals(jogador1) ? Color.RED : Color.BLUE);
 
         if (verificarVencedor()) {
             JOptionPane.showMessageDialog(this, "Vencedor: " + jogadorAtual);
