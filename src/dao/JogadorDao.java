@@ -20,15 +20,19 @@ public class JogadorDao {
         }
     }
 
-    public boolean adicionarJogador(Jogador jogador) throws IOException, ClassNotFoundException {
+    public boolean adicionarJogador(Jogador novoJogador) throws IOException, ClassNotFoundException {
         List<Jogador> jogadores = getJogadores();
-        if (!jogadores.contains(jogador)) {
-            jogadores.add(jogador);
-            atualizarArquivo(jogadores);
-            System.out.println("Jogador salvo: " + jogador.getNome());
-            return true;
+
+        for (Jogador jogador : jogadores) {
+            if (jogador.getNome().equalsIgnoreCase(novoJogador.getNome())) {
+                return true;
+            }
         }
-        return false;
+
+        jogadores.add(novoJogador);
+        atualizarArquivo(jogadores);
+        System.out.println("Novo jogador adicionado: " + novoJogador.getNome());
+        return true;
     }
 
     public boolean removerJogador(String nome) throws IOException, ClassNotFoundException {
