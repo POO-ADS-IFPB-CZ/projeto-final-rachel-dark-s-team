@@ -1,6 +1,7 @@
 package src.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Jogador implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -11,9 +12,9 @@ public class Jogador implements Serializable {
 
     public Jogador(String nome, int empates, int derrotas, int vitorias) {
         this.nome = nome;
-        this.empates = 0;
-        this.derrotas = 0;
-        this.vitorias = 0;
+        this.empates = empates;
+        this.derrotas = derrotas;
+        this.vitorias = vitorias;
     }
 
     public String getNome() {
@@ -36,13 +37,15 @@ public class Jogador implements Serializable {
         return empates;
     }
 
-    public void adicionarVitoria(){
+    public void adicionarVitoria() {
         this.vitorias++;
     }
-    public void adicionarEmpate(){
+
+    public void adicionarEmpate() {
         this.empates++;
     }
-    public void adicionarDerrota(){
+
+    public void adicionarDerrota() {
         this.derrotas++;
     }
 }

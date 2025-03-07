@@ -6,55 +6,58 @@ import src.model.Jogador;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TelaJogo extends JDialog {
     private JButton[][] botoes;
-    private int tamanho;
-    private String jogador1;
-    private String jogador2;
     private String jogadorAtual;
-    private JPanel contentPane;
+    private String jogador1, jogador2;
+    private int tamanho;
     private JogadorDao jogadorDao;
 
-    public TelaJogo(int tamanho, String jogador1, String jogador2) {
-        this.tamanho = tamanho;
+    public TelaJogo(String jogador1, String jogador2, int tamanho) {
         this.jogador1 = jogador1;
         this.jogador2 = jogador2;
+        this.tamanho = tamanho;
         this.jogadorAtual = jogador1;
+        this.jogadorDao = new JogadorDao();
 
-        setContentPane(contentPane);
+        setTitle("Jogo da Velha");
         setModal(true);
-        setSize(400,400);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-        JPanel tabuleiro = new JPanel();
-        tabuleiro.setLayout(new GridLayout(tamanho, tamanho));
+
+        JPanel painelTabuleiro = new JPanel(new GridLayout(tamanho, tamanho, 5, 5));
+        painelTabuleiro.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         botoes = new JButton[tamanho][tamanho];
-        for (int i = 0; i < tamanho; i++){
-            for (int j = 0; j < tamanho; j++){
+        for (int i = 0; i < tamanho; i++) {
+            for (int j = 0; j < tamanho; j++) {
                 botoes[i][j] = new JButton(" ");
-                botoes[i][j].setFont(new Font("Arial", Font.BOLD,30));
-                tabuleiro.add(botoes[i][j]);
+                botoes[i][j].setFont(new Font("Arial", Font.BOLD, 24));
+                botoes[i][j].setFocusPainted(false);
+                botoes[i][j].setPreferredSize(new Dimension(80, 80));
+                painelTabuleiro.add(botoes[i][j]);
+
                 final int x = i, y = j;
-                botoes[i][j].addActionListener(e -> realizaJogada(x,y));
+                botoes[i][j].addActionListener(e -> realizarJogada(x, y));
             }
         }
-        add(tabuleiro, BorderLayout.CENTER);
+
+        add(painelTabuleiro, BorderLayout.CENTER);
+        pack();
         setLocationRelativeTo(null);
     }
 
-    private void realizaJogada(int x, int y) {
-        if (!botoes[x][y].getText().equals(" ")){
-            return;
-        }
+    private void realizarJogada(int x, int y) {
+        if (!botoes[x][y].getText().equals(" ")) return;
+
         botoes[x][y].setText(jogadorAtual.equals(jogador1) ? "X" : "O");
+
         if (verificarVencedor()) {
             JOptionPane.showMessageDialog(this, "Vencedor: " + jogadorAtual);
             atualizarPlacar(jogadorAtual, jogadorAtual.equals(jogador1) ? jogador2 : jogador1);
             dispose();
-            new TelaInicial().setVisible(true);
             return;
         }
 
@@ -62,51 +65,42 @@ public class TelaJogo extends JDialog {
             JOptionPane.showMessageDialog(this, "O jogo terminou em empate!");
             atualizarPlacarEmpate();
             dispose();
-            new TelaInicial().setVisible(true);
             return;
         }
 
         jogadorAtual = jogadorAtual.equals(jogador1) ? jogador2 : jogador1;
     }
 
+
     private void atualizarPlacarEmpate() {
-        try{
+        try {
             List<Jogador> jogadores = jogadorDao.getJogadores();
-            System.out.println(jogadores);
-            if (jogadores == null){
-                jogadores = new ArrayList<>();
-            }
-            for (Jogador j : jogadores){
-                if (j.getNome().equals(jogador1) || j.getNome().equals(jogador2)){
+            for (Jogador j : jogadores) {
+                if (j.getNome().equals(jogador1) || j.getNome().equals(jogador2)) {
                     j.adicionarEmpate();
                 }
             }
             jogadorDao.atualizarArquivo(jogadores);
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar placar de empate.");
         }
     }
 
     private void atualizarPlacar(String vencedor, String perdedor) {
         try {
             List<Jogador> jogadores = jogadorDao.getJogadores();
-            if (jogadores == null){
-                jogadores = new ArrayList<>();
-            }
-            for (Jogador j : jogadores){
-                if(j.getNome().equals(vencedor)){
+            for (Jogador j : jogadores) {
+                if (j.getNome().equals(vencedor)) {
                     j.adicionarVitoria();
-                }else if(j.getNome().equals(perdedor)){
+                } else if (j.getNome().equals(perdedor)) {
                     j.adicionarDerrota();
                 }
             }
-
+            jogadorDao.atualizarArquivo(jogadores);
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar placar.");
         }
-
     }
-
 
     private boolean verificarVencedor() {
         for (int i = 0; i < tamanho; i++) {
@@ -161,5 +155,4 @@ public class TelaJogo extends JDialog {
         }
         return true;
     }
-    }
-
+}
