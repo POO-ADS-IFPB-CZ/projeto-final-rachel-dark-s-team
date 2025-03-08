@@ -14,6 +14,8 @@ public class TelaInicial extends JDialog {
     private JButton buttonPlacar;
     private JTextField campoJogador1;
     private JTextField campoJogador2;
+    private JButton opçõesButton;
+    private Integer tamanhoTabuleiro = 3;
 
     public TelaInicial() {
         setTitle("Jogo da Velha");
@@ -47,7 +49,7 @@ public class TelaInicial extends JDialog {
                         JOptionPane.showMessageDialog(null,"Erro ao salvar jogadores");
                         return;
                 }
-                TelaJogo telaJogo = new TelaJogo(nome1,nome2, 3);
+                TelaJogo telaJogo = new TelaJogo(nome1,nome2, tamanhoTabuleiro);
                 telaJogo.setVisible(true);
 
             }
@@ -60,6 +62,19 @@ public class TelaInicial extends JDialog {
                 telaPlacar.setVisible(true);
             }
         });
+        opçõesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TelaOpcoes telaOpcoes = new TelaOpcoes(null);
+                telaOpcoes.setVisible(true);
+                tamanhoTabuleiro = telaOpcoes.getTamanhoTabuleiro();
+
+                if (tamanhoTabuleiro != null) {
+                    JOptionPane.showMessageDialog(null, "Tabuleiro ajustado para " + tamanhoTabuleiro + "x" + tamanhoTabuleiro);
+                }
+            }
+        });
+
     }
 
     public static void main(String[] args) {
