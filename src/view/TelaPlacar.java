@@ -29,6 +29,8 @@ public class TelaPlacar extends JDialog {
         atualizarLista();
         scroll.setViewportView(listaJogadores);
         setTitle("Placar de Jogadores");
+        setLocationRelativeTo(null);
+
 
         buttonEditar.addActionListener(new ActionListener() {
             @Override

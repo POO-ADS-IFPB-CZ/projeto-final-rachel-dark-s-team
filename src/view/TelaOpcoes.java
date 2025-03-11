@@ -14,6 +14,8 @@ public class TelaOpcoes extends JDialog {
         super(parent, "Escolher Tamanho", true);
         setSize(300, 150);
         setLayout(new FlowLayout());
+        setLocationRelativeTo(null);
+
 
         JLabel label = new JLabel("Digite o tamanho do tabuleiro (3 a 10):");
         inputTamanho = new JTextField(5);

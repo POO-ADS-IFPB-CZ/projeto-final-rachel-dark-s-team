@@ -58,14 +58,14 @@ public class TelaJogo extends JDialog {
 
         if (verificarVencedor()) {
             JOptionPane.showMessageDialog(this, "Vencedor: " + jogadorAtual);
-            atualizarPlacar(jogadorAtual, jogadorAtual.equals(jogador1) ? jogador2 : jogador1);
+            atualizarPlacar(jogadorAtual, jogadorAtual.equals(jogador1) ? jogador2 : jogador1, false);
             dispose();
             return;
         }
 
         if (verificarEmpate()) {
             JOptionPane.showMessageDialog(this, "O jogo terminou em empate!");
-            atualizarPlacarEmpate();
+            atualizarPlacar(null, null, true);
             dispose();
             return;
         }
@@ -73,29 +73,20 @@ public class TelaJogo extends JDialog {
         jogadorAtual = jogadorAtual.equals(jogador1) ? jogador2 : jogador1;
     }
 
-
-    private void atualizarPlacarEmpate() {
+    private void atualizarPlacar(String vencedor, String perdedor, boolean empate) {
         try {
             List<Jogador> jogadores = jogadorDao.getJogadores();
             for (Jogador j : jogadores) {
-                if (j.getNome().equals(jogador1) || j.getNome().equals(jogador2)) {
-                    j.adicionarEmpate();
-                }
-            }
-            jogadorDao.atualizarArquivo(jogadores);
-        } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar placar de empate.");
-        }
-    }
-
-    private void atualizarPlacar(String vencedor, String perdedor) {
-        try {
-            List<Jogador> jogadores = jogadorDao.getJogadores();
-            for (Jogador j : jogadores) {
-                if (j.getNome().equals(vencedor)) {
-                    j.adicionarVitoria();
-                } else if (j.getNome().equals(perdedor)) {
-                    j.adicionarDerrota();
+                if (empate) {
+                    if (j.getNome().equals(jogador1) || j.getNome().equals(jogador2)) {
+                        j.adicionarEmpate();
+                    }
+                } else {
+                    if (j.getNome().equals(vencedor)) {
+                        j.adicionarVitoria();
+                    } else if (j.getNome().equals(perdedor)) {
+                        j.adicionarDerrota();
+                    }
                 }
             }
             jogadorDao.atualizarArquivo(jogadores);
@@ -103,6 +94,7 @@ public class TelaJogo extends JDialog {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar placar.");
         }
     }
+
 
     private boolean verificarVencedor() {
         for (int i = 0; i < tamanho; i++) {

@@ -24,6 +24,8 @@ public class TelaInicial extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonJogar);
         JogadorDao jogadorDao = new JogadorDao();
+        setLocationRelativeTo(null);
+
 
         buttonJogar.addActionListener(new ActionListener() {
             @Override
