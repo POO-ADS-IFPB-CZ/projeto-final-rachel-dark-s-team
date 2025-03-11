@@ -11,7 +11,7 @@ Este projeto implementa um **Jogo da Velha** em Java, utilizando a biblioteca **
 - **Java**  
 - **Swing** (Interface gráfica)  
 - **DAO (Data Access Object)** para manipulação dos jogadores  
-- **Paradigma Orientado a Objetos (POO)**  
+- **Programação Orientado a Objetos (POO)**  
 
 ## 🎯 Funcionalidades  
 
