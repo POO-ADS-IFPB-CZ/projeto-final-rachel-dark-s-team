@@ -1,1 +1,2 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/usvt_t8Y)
+Jogo da Velha com Placar
+Este projeto implementa um jogo da velha (Tic-Tac-Toe) em Java, utilizando a biblioteca Swing para a interface gráfica. O jogo inclui funcionalidades como placar de jogadores e a possibilidade de editar nomes dos jogadores.
